@@ -1,4 +1,4 @@
-﻿namespace CoursesSelectionAPI;
+﻿namespace CoursesSelectionAPI.Models;
 
 public class WeatherForecast
 {
