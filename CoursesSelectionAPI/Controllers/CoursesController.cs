@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using CoursesSelectionAPI.Models;
 using Microsoft.AspNetCore.Http;
+using System.Xml.Linq;
 
 namespace CoursesSelectionAPI.Controllers;
 
@@ -41,56 +42,28 @@ public class CoursesController : ControllerBase
         return Ok(_courseRepository.ListCourses());
     }
 
-    /// <summary>
-    /// <para name = "name" />
-    /// </ summary >
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
-    public IActionResult CreateCourse([FromBody] JObject data)
-    {
-        string name = data["name"].ToString();
-        string description = data["description"].ToString();
-        DateTime start_time = data["start_time"].ToObject<DateTime>();
-        DateTime end_time = data["end_time"].ToObject<DateTime>();
-        string rating_policy = data["rating_policy"].ToString();
-        string credits = data["credits"].ToString();
-        string classroomId = data["classroomId"].ToString();
-        int credits_int = Tools.ParseStrToPostiveInt(credits);
-        int classroomId_int = Tools.ParseStrToPostiveInt(credits);
-
-        if (credits_int < 0 || classroomId_int < 0)
-        {
-            return BadRequest();
-        }
-
-        return CreateCourse(name, description, start_time, end_time, rating_policy, credits_int, classroomId_int);
-    }
-
-    //set to public for testing
-    private IActionResult CreateCourse(
-        string name,
-        string description,
-        DateTime start_time,
-        DateTime end_time,
-        string rating_policy,
-        int credits,
-        int classroomId)
+    public IActionResult CreateCourse([FromBody] Course course)
     {
         Guid courseId = Guid.NewGuid();
+
         _courseRepository.CreateCourse(new Course
         {
             id = courseId,
-            name = name,
-            description = description,
-            start_time = start_time,
-            end_time = end_time,
-            rating_policy = rating_policy,
-            credits = credits,
-            classroomId = classroomId
+            name = course.name,
+            description = course.description,
+            start_time = course.start_time,
+            end_time = course.end_time,
+            rating_policy = course.rating_policy,
+            credits = course.credits,
+            classroomId = course.classroomId
         });
 
         return Ok(courseId);
+
     }
+
 }
 
 public class Tools
@@ -106,15 +79,5 @@ public class Tools
         dt = dt.AddDays(daysUntilTuesday);
 
         return dt;
-    }
-
-    static public int ParseStrToPostiveInt(string input)
-    {
-        if (int.TryParse(input, out int output))
-        {
-            return output;
-        }
-
-        return -1;
     }
 }

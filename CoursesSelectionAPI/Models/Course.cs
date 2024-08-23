@@ -1,12 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CoursesSelectionAPI.Models
 {
     public class Course
     {
         [Required]
-        public Guid id { set; get; }
+        public Guid id { internal set; get; }
 
         [Required]
         public string name { set; get; }
