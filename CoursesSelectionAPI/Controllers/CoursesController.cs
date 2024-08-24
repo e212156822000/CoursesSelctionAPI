@@ -36,7 +36,7 @@ public class CoursesController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Course))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Course>))]
     public IActionResult GetAllCourses()
     {
         return Ok(_courseRepository.ListCourses());
