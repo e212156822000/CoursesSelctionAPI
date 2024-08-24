@@ -6,7 +6,6 @@ namespace CoursesSelectionAPI.Models
 		public void CreateCourse(Course course);
 
 		public IEnumerable<Course> ListCourses();
-
 	}
 }
 
