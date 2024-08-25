@@ -15,7 +15,7 @@ namespace CoursesSelectionAPI.Models
         public Guid id { internal set; get; }
 
         [Required]
-        public string name { set; get; } = "";
+        public string name { set; get; }
 
         public string description { set; get; } = "";
 

@@ -11,6 +11,7 @@ namespace CourseSelectionAPI.Models
         [Required]
         public string office { set; get; }
 
+        [Required]
         public int academic_attributes_id { set; get; }
 
     }
