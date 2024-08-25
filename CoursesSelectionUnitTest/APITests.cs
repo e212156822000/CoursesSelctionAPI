@@ -43,7 +43,7 @@ namespace CoursesSelectionUnitTest
         {
             var client = _client;
 
-            List<Course> courses = Enumerable.Range(0, 5).Select(index => new Course
+            List<CourseDto> courses = Enumerable.Range(0, 5).Select(index => new CourseDto
             {
                 Name = "Operating System " + index,
                 Description = "A fundamental course to introduce Operation System",

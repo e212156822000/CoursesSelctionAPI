@@ -76,7 +76,7 @@ namespace CourseSelectionUnitTest
         [TestMethod]
         public void CreateCourse_SameNameDifferentStartTIme_Success()
         {
-            //CreateCourse(string Name, string Description, int ClassroomId, DateTime StartTime, DateTime EndTime, int Credits, string RatingPolicy);
+            //CreateCourseAsync(string Name, string Description, int ClassroomId, DateTime StartTime, DateTime EndTime, int Credits, string RatingPolicy);
             List<Course> initDb = Enumerable.Range(1, 2).Select(index => new Course
             {
                 CourseId = Guid.NewGuid(),
@@ -91,7 +91,7 @@ namespace CourseSelectionUnitTest
 
             //int Name = "Operating System";
 
-            //IActionResult actionResult = coursesController.CreateCourse();
+            //IActionResult actionResult = coursesController.CreateCourseAsync();
             //var okResult = actionResult as OkObjectResult;
 
             //Assert.AreEqual(200, okResult.StatusCode);

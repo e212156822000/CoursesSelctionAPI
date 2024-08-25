@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json.Linq;
-using System.Threading.Tasks;
+﻿using CoursesSelectionAPI.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using CoursesSelectionAPI.Models;
-using Microsoft.AspNetCore.Http;
-using System.Xml.Linq;
 
 namespace CoursesSelectionAPI.Controllers;
 
@@ -15,8 +7,7 @@ namespace CoursesSelectionAPI.Controllers;
 [Route("[controller]")]
 public class CoursesController : ControllerBase
 {
-    private ICourseRepository _courseRepository;
-
+    private readonly ICourseRepository _courseRepository;
 
     public CoursesController(ICourseRepository courseRepository)
     {
@@ -27,11 +18,8 @@ public class CoursesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Course))]
     public IActionResult GetCourses(Guid id)
     {
-        foreach (var course in _courseRepository.ListCourses())
-        {
-            if (course.CourseId == id) return Ok(course);
-        }
-        return NotFound();
+        var course = _courseRepository.FindCourseByIdAsync(id);
+        return course != null ? Ok(course) : NotFound();
     }
 
     [HttpGet]
@@ -43,24 +31,17 @@ public class CoursesController : ControllerBase
 
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
-    public IActionResult CreateCourse([FromBody] Course course)
+    public async Task<IActionResult> CreateCourse([FromBody] CourseDto courseDto)
     {
-        Guid courseId = Guid.NewGuid();
-
-        _courseRepository.CreateCourse(new Course
+        if (!ModelState.IsValid)
         {
-            CourseId = courseId,
-            Name = course.Name,
-            Description = course.Description,
-            StartTime = course.StartTime,
-            EndTime = course.EndTime,
-            RatingPolicy = course.RatingPolicy,
-            Credits = course.Credits,
-            ClassroomId = course.ClassroomId
-        });
+            return BadRequest(ModelState);
+        }
 
-        return Ok(courseId);
+        var course = new Course(courseDto);
+        await _courseRepository.CreateCourseAsync(course);
 
+        return Ok(course.CourseId);
     }
 
 }

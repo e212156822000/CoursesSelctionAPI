@@ -12,13 +12,18 @@ namespace CoursesSelectionAPI.Models
             _db = courseSelectionDataContext;
         }
 
-        public void CreateCourse(Course course)
+        public async Task CreateCourseAsync(Course course)
         {
             var now = DateTime.UtcNow;
             course.CreatedAt = now;
             course.LastUpdated = now;
             _db.Courses.Add(course);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task<Course?> FindCourseByIdAsync(Guid id)
+        {
+            return await _db.Courses.FindAsync(id);
         }
 
         public IEnumerable<Course> ListCourses()

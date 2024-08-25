@@ -10,6 +10,19 @@ namespace CoursesSelectionAPI.Models
 {
     public class Course
     {
+        public Course() { }
+
+        public Course(CourseDto courseDto)
+        {
+            Name = courseDto.Name;
+            Description = courseDto.Description;
+            ClassroomId = courseDto.ClassroomId;
+            StartTime = courseDto.StartTime;
+            EndTime = courseDto.EndTime;
+            Credits = courseDto.Credits;
+            RatingPolicy = courseDto.RatingPolicy;
+        }
+
         [Key]
         [JsonInclude]
         public Guid CourseId { internal set; get; }
