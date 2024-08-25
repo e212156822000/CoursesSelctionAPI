@@ -99,7 +99,7 @@ namespace CoursesSelectionUnitTest
         }
 
         [TestMethod]
-        public async Task GetCourses_ValidCourseId_SuccessAsync()
+        public async Task GetCourses_ValidCourseId_Success()
         {
             //Arrange
             var client = _client;
