@@ -6,6 +6,11 @@ namespace CoursesSelectionAPI.Models
 		public void CreateCourse(Course course);
 
 		public IEnumerable<Course> ListCourses();
+
+		public Course? GetCourse(Guid courseId);
+
+		public bool DeleteCourse(Guid courseId);
+
 	}
 }
 

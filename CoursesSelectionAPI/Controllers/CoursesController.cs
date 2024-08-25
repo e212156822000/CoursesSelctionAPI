@@ -25,17 +25,18 @@ public class CoursesController : ControllerBase
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Course))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult GetCourses(Guid id)
     {
-        foreach (var course in _courseRepository.ListCourses())
-        {
-            if (course.id == id) return Ok(course);
-        }
-        return NotFound();
+        var course = _courseRepository.GetCourse(id);
+
+        return course != null ? Ok(course) : NotFound();
     }
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Course>))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult GetAllCourses()
     {
         return Ok(_courseRepository.ListCourses());
@@ -60,6 +61,21 @@ public class CoursesController : ControllerBase
         });
 
         return Ok(courseId);
+
+    }
+
+    [HttpDelete]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public IActionResult DeleteCourse([FromBody] Guid courseId)
+    {
+        if(_courseRepository.DeleteCourse(courseId))
+        {
+            return Ok();
+        }
+
+        return NotFound();
 
     }
 

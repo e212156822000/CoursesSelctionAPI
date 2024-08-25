@@ -16,6 +16,32 @@ namespace CoursesSelectionAPI.Models
         {
             return _courses;
         }
+
+        public Course? GetCourse(Guid courseId)
+        {
+            foreach (var course in _courses)
+            {
+                if (course.id == courseId) return course;
+            }
+
+            return null;
+        }
+
+        public bool DeleteCourse(Guid courseId)
+        {
+            foreach(var course in _courses)
+            {
+                if (course.id == courseId)
+                {
+                    _courses.Remove(course);
+
+                    return true;
+                }
+            }
+
+            return false;
+
+        }
     }
 }
 
