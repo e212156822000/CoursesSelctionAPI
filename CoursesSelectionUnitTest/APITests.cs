@@ -12,6 +12,7 @@ using System.Net;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc;
+using CoursesSelectionUnitTest.Utils;
 
 namespace CoursesSelectionUnitTest
 {
@@ -84,12 +85,8 @@ namespace CoursesSelectionUnitTest
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            var jsonResponse = await response.Content.ReadAsStringAsync();
-
-            List<Course>? courses = JsonSerializer.Deserialize<List<Course>>(jsonResponse);
-
+            var courses = await response.ReadJsonResponseAsync<List<Course>>();
             Assert.IsNotNull(courses);
-
             Assert.AreEqual(5, courses.Count);
 
             for (int i = 0; i < 5; i++)
@@ -108,10 +105,7 @@ namespace CoursesSelectionUnitTest
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            var jsonResponse = await response.Content.ReadAsStringAsync();
-
-            Course? course = JsonSerializer.Deserialize<Course>(jsonResponse);
-
+            var course = await response.ReadJsonResponseAsync<Course>();
             Assert.IsNotNull(course);
 
             Assert.AreEqual(_initializedIds.First(), course.id);
