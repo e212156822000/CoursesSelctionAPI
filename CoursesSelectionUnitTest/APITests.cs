@@ -116,6 +116,20 @@ namespace CoursesSelectionUnitTest
 
             Assert.AreEqual(_initializedIds.First(), course.id);
         }
+
+        [TestMethod]
+        public async Task GetCourses_InvalidCourseId_NotFound()
+        {
+            //Arrange
+            var client = _client;
+
+            var invalidCourseId = Guid.NewGuid();
+
+            var response = await client.GetAsync("courses/" + invalidCourseId);
+
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+
+        }
     }
 }
 
