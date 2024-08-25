@@ -8,19 +8,19 @@ namespace CourseSelectionAPI.Models
         public int id { set; get; }
 
         [Required]
-        public string username { set; get; }
+        public string username { set; get; } = null!;
 
         [Required]
-        public string password { set; get; }
+        public string password { set; get; } = null!;
 
         [Required]
-        public string email { set; get; }
+        public string email { set; get; } = null!;
 
         [Required]
-        public string firstname { set; get; }
+        public string firstname { set; get; } = null!;
 
         [Required]
-        public string lastname { set; get; }
+        public string lastname { set; get; } = null!;
 
         [Required]
         public DateTime created_at { set; get; }

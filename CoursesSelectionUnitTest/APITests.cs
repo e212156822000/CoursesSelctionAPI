@@ -45,12 +45,12 @@ namespace CoursesSelectionUnitTest
 
             List<Course> courses = Enumerable.Range(0, 5).Select(index => new Course
             {
-                name = "Operating System " + index,
-                description = "A fundamental course to introduce Operation System",
-                credits = 3,
-                rating_policy = "Homework 100%",
-                start_time = Tools.CreateDayOfWeek(4, 9, 0),
-                end_time = Tools.CreateDayOfWeek(4, 12, 0)
+                Name = "Operating System " + index,
+                Description = "A fundamental course to introduce Operation System",
+                Credits = 3,
+                RatingPolicy = "Homework 100%",
+                StartTime = Tools.CreateDayOfWeek(4, 9, 0),
+                EndTime = Tools.CreateDayOfWeek(4, 12, 0)
             })
             .ToList();
 
@@ -91,7 +91,7 @@ namespace CoursesSelectionUnitTest
 
             for (int i = 0; i < 5; i++)
             {
-                Assert.AreEqual(_initializedIds[i], courses[i].id);
+                Assert.AreEqual(_initializedIds[i], courses[i].CourseId);
             }
         }
 
@@ -108,7 +108,7 @@ namespace CoursesSelectionUnitTest
             var course = await response.ReadJsonResponseAsync<Course>();
             Assert.IsNotNull(course);
 
-            Assert.AreEqual(_initializedIds.First(), course.id);
+            Assert.AreEqual(_initializedIds.First(), course.CourseId);
         }
     }
 }

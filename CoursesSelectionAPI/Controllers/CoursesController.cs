@@ -29,7 +29,7 @@ public class CoursesController : ControllerBase
     {
         foreach (var course in _courseRepository.ListCourses())
         {
-            if (course.id == id) return Ok(course);
+            if (course.CourseId == id) return Ok(course);
         }
         return NotFound();
     }
@@ -49,14 +49,14 @@ public class CoursesController : ControllerBase
 
         _courseRepository.CreateCourse(new Course
         {
-            id = courseId,
-            name = course.name,
-            description = course.description,
-            start_time = course.start_time,
-            end_time = course.end_time,
-            rating_policy = course.rating_policy,
-            credits = course.credits,
-            classroomId = course.classroomId
+            CourseId = courseId,
+            Name = course.Name,
+            Description = course.Description,
+            StartTime = course.StartTime,
+            EndTime = course.EndTime,
+            RatingPolicy = course.RatingPolicy,
+            Credits = course.Credits,
+            ClassroomId = course.ClassroomId
         });
 
         return Ok(courseId);

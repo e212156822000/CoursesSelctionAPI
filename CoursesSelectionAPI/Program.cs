@@ -1,5 +1,7 @@
-﻿using CoursesSelectionAPI.Init;
+﻿using CoursesSelectionAPI.DataStore;
+using CoursesSelectionAPI.Init;
 using CoursesSelectionAPI.Models;
+using CoursesSelectionAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,9 +15,7 @@ builder.Services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services
-    .AddSingleton<ICourseRepository, FakeCourseRepository>()
-    ;
+builder.Services.AddApiServices();
 
 var app = builder.Build();
 

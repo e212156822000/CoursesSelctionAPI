@@ -21,11 +21,11 @@ namespace CourseSelectionUnitTest
             //Arrange
             List<Course> initDb = Enumerable.Range(1, 5).Select(index => new Course
             {
-                id = new Guid(),
-                name = "Operating System " + index,
-                description = "A fundamental course to introduce Operation System",
-                start_time = Tools.CreateDayOfWeek(4, 9, 0),
-                end_time = Tools.CreateDayOfWeek(4, 12, 0)
+                CourseId = new Guid(),
+                Name = "Operating System " + index,
+                Description = "A fundamental course to introduce Operation System",
+                StartTime = Tools.CreateDayOfWeek(4, 9, 0),
+                EndTime = Tools.CreateDayOfWeek(4, 12, 0)
             })
             .ToList();
 
@@ -46,21 +46,21 @@ namespace CourseSelectionUnitTest
             Guid courseId = Guid.NewGuid();
             List<Course> initDb = Enumerable.Range(1, 5).Select(index => new Course
             {
-                id = Guid.NewGuid(),
-                name = "Operating System " + index,
-                description = "A fundamental course to introduce Operation System",
-                start_time = Tools.CreateDayOfWeek(4, 9, 0),
-                end_time = Tools.CreateDayOfWeek(4, 12, 0)
+                CourseId = Guid.NewGuid(),
+                Name = "Operating System " + index,
+                Description = "A fundamental course to introduce Operation System",
+                StartTime = Tools.CreateDayOfWeek(4, 9, 0),
+                EndTime = Tools.CreateDayOfWeek(4, 12, 0)
             })
             .ToList();
 
             initDb.Add(new Course
             {
-                id = courseId,
-                name = "Tested Course",
-                description = "A Tested Course",
-                start_time = Tools.CreateDayOfWeek(4, 9, 0),
-                end_time = Tools.CreateDayOfWeek(4, 12, 0)
+                CourseId = courseId,
+                Name = "Tested Course",
+                Description = "A Tested Course",
+                StartTime = Tools.CreateDayOfWeek(4, 9, 0),
+                EndTime = Tools.CreateDayOfWeek(4, 12, 0)
             });
 
             var coursesController = new CoursesController(initDb);
@@ -68,7 +68,7 @@ namespace CourseSelectionUnitTest
             IActionResult actionResult = coursesController.GetCourses(courseId.ToString());
             var okResult = actionResult as OkObjectResult;
             var body = (Course)okResult.Value;
-            Assert.AreEqual(courseId, body.id);
+            Assert.AreEqual(courseId, body.CourseId);
             Assert.AreEqual(200, okResult.StatusCode);
 
         }
@@ -76,20 +76,20 @@ namespace CourseSelectionUnitTest
         [TestMethod]
         public void CreateCourse_SameNameDifferentStartTIme_Success()
         {
-            //CreateCourse(string name, string description, int classroomId, DateTime start_time, DateTime end_time, int credits, string rating_policy);
+            //CreateCourse(string Name, string Description, int ClassroomId, DateTime StartTime, DateTime EndTime, int Credits, string RatingPolicy);
             List<Course> initDb = Enumerable.Range(1, 2).Select(index => new Course
             {
-                id = Guid.NewGuid(),
-                name = "Operating System",
-                description = "A fundamental course to introduce Operation System",
-                start_time = Tools.CreateDayOfWeek(4, 9, 0),
-                end_time = Tools.CreateDayOfWeek(4, 12, 0)
+                CourseId = Guid.NewGuid(),
+                Name = "Operating System",
+                Description = "A fundamental course to introduce Operation System",
+                StartTime = Tools.CreateDayOfWeek(4, 9, 0),
+                EndTime = Tools.CreateDayOfWeek(4, 12, 0)
             })
             .ToList();
 
             var coursesController = new CoursesController(initDb);
 
-            //int name = "Operating System";
+            //int Name = "Operating System";
 
             //IActionResult actionResult = coursesController.CreateCourse();
             //var okResult = actionResult as OkObjectResult;
