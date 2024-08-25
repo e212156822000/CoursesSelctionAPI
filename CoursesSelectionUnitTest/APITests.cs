@@ -60,7 +60,7 @@ namespace CoursesSelectionUnitTest
 
                 var response = await client.PutAsync("courses/", new StringContent(requestBody, Encoding.UTF8, "application/json"));
 
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+                Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
 
                 Assert.IsNotNull(response);
 

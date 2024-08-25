@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CoursesSelectionAPI.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route(RouteContants.Courses)]
 public class CoursesController : ControllerBase
 {
     private readonly ICourseRepository _courseRepository;
@@ -16,7 +16,7 @@ public class CoursesController : ControllerBase
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Course))]
-    public IActionResult GetCourses(Guid id)
+    public IActionResult GetCourse(Guid id)
     {
         var course = _courseRepository.FindCourseByIdAsync(id);
         return course != null ? Ok(course) : NotFound();
@@ -41,7 +41,7 @@ public class CoursesController : ControllerBase
         var course = new Course(courseDto);
         await _courseRepository.CreateCourseAsync(course);
 
-        return Ok(course.CourseId);
+        return CreatedAtAction(nameof(GetCourse), RouteContants.Courses, new { id = course.CourseId }, course);
     }
 
 }

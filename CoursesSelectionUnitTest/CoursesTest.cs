@@ -32,7 +32,7 @@ namespace CourseSelectionUnitTest
             var coursesController = new CoursesController(initDb);
 
             //Test 
-            IActionResult actionResult = coursesController.GetCourses();
+            IActionResult actionResult = coursesController.GetCourse();
             var okResult = actionResult as OkObjectResult;
             var body = (IEnumerable<Course>)okResult.Value;
             Assert.AreEqual(5, body.Count<Course>());
@@ -65,7 +65,7 @@ namespace CourseSelectionUnitTest
 
             var coursesController = new CoursesController(initDb);
 
-            IActionResult actionResult = coursesController.GetCourses(courseId.ToString());
+            IActionResult actionResult = coursesController.GetCourse(courseId.ToString());
             var okResult = actionResult as OkObjectResult;
             var body = (Course)okResult.Value;
             Assert.AreEqual(courseId, body.CourseId);
