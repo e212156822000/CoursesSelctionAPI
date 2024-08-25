@@ -11,6 +11,7 @@ using System.Text.Json;
 using System.Net;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CoursesSelectionUnitTest
 {
@@ -83,8 +84,6 @@ namespace CoursesSelectionUnitTest
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            Assert.IsNotNull(response);
-
             var jsonResponse = await response.Content.ReadAsStringAsync();
 
             List<Course>? courses = JsonSerializer.Deserialize<List<Course>>(jsonResponse);
@@ -97,6 +96,25 @@ namespace CoursesSelectionUnitTest
             {
                 Assert.AreEqual(_initializedIds[i], courses[i].id);
             }
+        }
+
+        [TestMethod]
+        public async Task GetCourses_ValidCourseId_SuccessAsync()
+        {
+            //Arrange
+            var client = _client;
+
+            var response = await client.GetAsync("courses/"+_initializedIds.First());
+
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+
+            Course? course = JsonSerializer.Deserialize<Course>(jsonResponse);
+
+            Assert.IsNotNull(course);
+
+            Assert.AreEqual(_initializedIds.First(), course.id);
         }
     }
 }
