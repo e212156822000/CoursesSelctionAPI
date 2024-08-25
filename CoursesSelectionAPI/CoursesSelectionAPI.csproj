@@ -19,10 +19,6 @@
     <Folder Include="Models\" />
     <Folder Include="Interfaces\" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\CoursesSelectionAPI\CoursesSelectionAPI.csproj" />
-  </ItemGroup>
   
   <ItemGroup>
      <InternalsVisibleTo Include="CoursesSelectionUnitTest" />

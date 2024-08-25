@@ -27,7 +27,6 @@ public class CoursesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Course))]
     public IActionResult GetCourses(Guid id)
     {
-        Console.WriteLine(id);
         foreach (var course in _courseRepository.ListCourses())
         {
             if (course.id == id) return Ok(course);

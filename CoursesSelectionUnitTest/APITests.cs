@@ -37,7 +37,6 @@ namespace CoursesSelectionUnitTest
         }
 
         [TestInitialize]
-        /// pre loaded data into database
         public async Task CoursesTestInitialize()
         {
             var client = _client;
@@ -82,6 +81,8 @@ namespace CoursesSelectionUnitTest
 
             var response = await client.GetAsync("courses/");
 
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+
             Assert.IsNotNull(response);
 
             var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -89,8 +90,6 @@ namespace CoursesSelectionUnitTest
             List<Course>? courses = JsonSerializer.Deserialize<List<Course>>(jsonResponse);
 
             Assert.IsNotNull(courses);
-
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
             Assert.AreEqual(5, courses.Count);
 
