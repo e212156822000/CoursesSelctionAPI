@@ -64,13 +64,13 @@ public class CoursesController : ControllerBase
 
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult DeleteCourse([FromBody] Guid courseId)
+    public IActionResult DeleteCourse(Guid id)
     {
-        if(_courseRepository.DeleteCourse(courseId))
+        if(_courseRepository.DeleteCourse(id))
         {
             return Ok();
         }
