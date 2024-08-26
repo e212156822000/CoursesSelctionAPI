@@ -1,17 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text;
-using System.Threading.Tasks;
 using CoursesSelectionAPI.Models;
 using CoursesSelectionAPI.Controllers;
-using System.Xml.Linq;
 using System.Text.Json;
 using System.Net;
-using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Mvc;
 
 namespace CoursesSelectionUnitTest
 {
