@@ -11,6 +11,7 @@ namespace CoursesSelectionAPI.Models
 
 		public bool DeleteCourse(Guid courseId);
 
+		public void UpdateCourse(Course originalCourse, Course course);
 	}
 }
 

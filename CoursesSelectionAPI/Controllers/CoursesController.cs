@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using CoursesSelectionAPI.Models;
 using Microsoft.AspNetCore.Http;
 using System.Xml.Linq;
+using System.Text.Json;
+using Microsoft.AspNetCore.JsonPatch;
+
 
 namespace CoursesSelectionAPI.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("courses")]
 public class CoursesController : ControllerBase
 {
     private ICourseRepository _courseRepository;
@@ -79,6 +81,24 @@ public class CoursesController : ControllerBase
 
     }
 
+    [HttpPatch("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public IActionResult UpdateCourse(Guid id, [FromBody] JsonPatchDocument<Course?> patchDoc)
+    {
+
+        var existingCourse = _courseRepository.GetCourse(id);
+
+        if (existingCourse == null) return NotFound();
+
+        patchDoc.ApplyTo(existingCourse);
+
+        //存入DB 還需要一步
+
+        return Ok(existingCourse);
+
+    }
 }
 
 public class Tools

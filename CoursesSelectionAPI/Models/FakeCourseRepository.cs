@@ -42,6 +42,14 @@ namespace CoursesSelectionAPI.Models
             return false;
 
         }
+
+        public void UpdateCourse(Course originalCourse, Course course)
+        {
+            if(course.classroomId != null)
+            {
+                originalCourse.classroomId = course.classroomId;
+            }
+        }
     }
 }
 
