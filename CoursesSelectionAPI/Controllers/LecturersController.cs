@@ -58,7 +58,7 @@ public class LecturersController : ControllerBase
             Office = lecturer.Office
         });
 
-        return CreatedAtAction(nameof(GetLecturer), "courses/", new { id = lecturerId }, lecturer);
+        return CreatedAtAction(nameof(GetLecturer), "lecturers/", new { id = lecturerId }, lecturer);
 
     }
 

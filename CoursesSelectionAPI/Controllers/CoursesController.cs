@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CoursesSelectionAPI.Models;
 using Microsoft.AspNetCore.JsonPatch;
+using CourseSelectionAPI.Models;
 
 
 namespace CoursesSelectionAPI.Controllers;
@@ -64,8 +65,7 @@ public class CoursesController : ControllerBase
             ClassroomId = course.ClassroomId
         });
 
-        return Ok(courseId);
-
+        return CreatedAtAction(nameof(GetCourse), new { courseId = courseId }, courseId);
     }
 
     [HttpDelete("{courseId}")]

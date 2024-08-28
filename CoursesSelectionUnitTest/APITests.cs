@@ -51,7 +51,7 @@ namespace CoursesSelectionUnitTest
 
                 Assert.IsNotNull(response);
 
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+                Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
 
                 var jsonResponse = await response.Content.ReadAsStringAsync();
 

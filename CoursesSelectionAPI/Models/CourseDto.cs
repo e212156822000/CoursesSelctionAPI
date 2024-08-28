@@ -6,10 +6,6 @@ namespace CoursesSelectionAPI.Models
 {
     public class CourseDto
     {
-        [Key]
-        [Required]
-        [JsonInclude]
-        public Guid courseId { internal set; get; }
 
         public string Name { set; get; } = null!;
 
