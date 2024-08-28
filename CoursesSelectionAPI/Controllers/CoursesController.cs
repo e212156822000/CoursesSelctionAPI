@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Mvc;
 using CoursesSelectionAPI.Models;
-using Microsoft.AspNetCore.Http;
-using System.Xml.Linq;
-using System.Text.Json;
 using Microsoft.AspNetCore.JsonPatch;
 
 
@@ -19,60 +11,72 @@ public class CoursesController : ControllerBase
 {
     private ICourseRepository _courseRepository;
 
-
     public CoursesController(ICourseRepository courseRepository)
     {
         _courseRepository = courseRepository;
     }
 
-    [HttpGet("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Course))]
+    [HttpGet("{courseId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CourseDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult GetCourses(Guid id)
+    public IActionResult GetCourse(Guid courseId)
     {
-        var course = _courseRepository.GetCourse(id);
+        var course = _courseRepository.GetCourse(courseId);
 
         return course != null ? Ok(course) : NotFound();
     }
 
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Course>))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult GetAllCourses()
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<CourseDto>))]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public IActionResult GetAllCourses(
+        [FromQuery] int? offset,
+        [FromQuery] int? limit,
+        [FromQuery] string? dept,
+        [FromQuery] string? college)
     {
         return Ok(_courseRepository.ListCourses());
     }
 
     [HttpPut]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
-    public IActionResult CreateCourse([FromBody] Course course)
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    //[SwaggerResponse(StatusCodes.Status409Conflict, Description = "The same course name and start time already exists under the same lecturer.")]
+    public IActionResult CreateCourse([FromBody] CourseDto course)
     {
+        //TODO: Conflict Detetion
+        
         Guid courseId = Guid.NewGuid();
 
         _courseRepository.CreateCourse(new Course
         {
-            id = courseId,
-            name = course.name,
-            description = course.description,
-            start_time = course.start_time,
-            end_time = course.end_time,
-            rating_policy = course.rating_policy,
-            credits = course.credits,
-            classroomId = course.classroomId
+            courseId = courseId,
+            Name = course.Name,
+            Description = course.Description,
+            StartTime = course.StartTime,
+            EndTime = course.EndTime,
+            RatingPolicy = course.RatingPolicy,
+            Credits = course.Credits,
+            ClassroomId = course.ClassroomId
         });
 
         return Ok(courseId);
 
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{courseId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult DeleteCourse(Guid id)
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult DeleteCourse(Guid courseId)
     {
-        if(_courseRepository.DeleteCourse(id))
+        if(_courseRepository.DeleteCourse(courseId))
         {
             return Ok();
         }
@@ -81,20 +85,23 @@ public class CoursesController : ControllerBase
 
     }
 
-    [HttpPatch("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [HttpPatch("{courseId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CourseDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult UpdateCourse(Guid id, [FromBody] JsonPatchDocument<Course?> patchDoc)
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public IActionResult UpdateCourse(Guid courseId, [FromBody] JsonPatchDocument<Course?> patchDoc)
     {
 
-        var existingCourse = _courseRepository.GetCourse(id);
+        var existingCourse = _courseRepository.GetCourse(courseId);
 
         if (existingCourse == null) return NotFound();
 
         patchDoc.ApplyTo(existingCourse);
 
-        //存入DB 還需要一步
+        //TODO: Implement and save the updated data.
 
         return Ok(existingCourse);
 

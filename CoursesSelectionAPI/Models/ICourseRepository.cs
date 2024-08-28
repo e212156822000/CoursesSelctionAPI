@@ -9,7 +9,9 @@ namespace CoursesSelectionAPI.Models
 
 		public Course? GetCourse(Guid courseId);
 
-		public bool DeleteCourse(Guid courseId);
+        public List<Course> GetCourseByLecturerId(string lecturerId);
+
+        public bool DeleteCourse(Guid courseId);
 
 		public void UpdateCourse(Course originalCourse, Course course);
 	}

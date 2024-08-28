@@ -14,7 +14,8 @@ builder.Services.AddControllers(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services
-    .AddSingleton<ICourseRepository, FakeCourseRepository>()
+    .AddSingleton<ICourseRepository, ListCourseRepository>()
+    .AddSingleton<ILecturerRepository, ListLecturerRepository>()
     ;
 
 var app = builder.Build();

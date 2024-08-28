@@ -15,7 +15,7 @@ namespace CoursesSelectionUnitTest
             _client = _factory.CreateClient();
 
         }
-
+        //doese not have DB, so reuse client
         public HttpClient CreateClient(string name)
         {
             return _client;

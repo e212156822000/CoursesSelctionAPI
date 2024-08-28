@@ -13,8 +13,6 @@ namespace CoursesSelectionUnitTest
 	{
         private readonly IHttpClientFactory _httpClientFactory;
 
-        private readonly HttpClient _client;
-
         private List<Guid> _initializedIds = new List<Guid>();
 
         public APITests()
@@ -27,22 +25,21 @@ namespace CoursesSelectionUnitTest
 
             _httpClientFactory = serviceProvider.GetService<IHttpClientFactory>() ?? throw new ArgumentException(nameof(IHttpClientFactory));
 
-            _client = _httpClientFactory.CreateClient();
         }
 
         [TestInitialize]
         public async Task CoursesTestInitialize()
         {
-            var client = _client;
+            var client = _httpClientFactory.CreateClient();
 
             List<Course> courses = Enumerable.Range(0, 5).Select(index => new Course
             {
-                name = "Operating System " + index,
-                description = "A fundamental course to introduce Operation System",
-                credits = 3,
-                rating_policy = "Homework 100%",
-                start_time = Tools.CreateDayOfWeek(4, 9, 0),
-                end_time = Tools.CreateDayOfWeek(4, 12, 0)
+                Name = "Operating System " + index,
+                Description = "A fundamental course to introduce Operation System",
+                Credits = 3,
+                RatingPolicy = "Homework 100%",
+                StartTime = Tools.CreateDayOfWeek(4, 9, 0),
+                EndTime = Tools.CreateDayOfWeek(4, 12, 0)
             })
             .ToList();
 
@@ -52,9 +49,9 @@ namespace CoursesSelectionUnitTest
 
                 var response = await client.PutAsync("courses/", new StringContent(requestBody, Encoding.UTF8, "application/json"));
 
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-
                 Assert.IsNotNull(response);
+
+                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
                 var jsonResponse = await response.Content.ReadAsStringAsync();
 
@@ -68,10 +65,61 @@ namespace CoursesSelectionUnitTest
 
         }
 
+        [TestCleanup]
+        public async Task CoursesTestCleanUp()
+        {
+            var client = _httpClientFactory.CreateClient();
+
+            foreach (var _initializedId in _initializedIds)
+            {
+                var response = await client.DeleteAsync("courses/" + _initializedId);
+
+                Assert.IsNotNull(response);
+
+                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            }
+
+            _initializedIds.Clear();
+        }
+
+        [TestMethod]
+        public async Task DeleteCourse_ValidCourseId_Success()
+        {
+            var client = _httpClientFactory.CreateClient();
+
+            var response = await client.DeleteAsync("courses/" + _initializedIds.Last());
+
+            Assert.IsNotNull(response);
+
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+
+            _initializedIds.Remove(_initializedIds.Last());
+        }
+
+        [TestMethod]
+        public async Task GetCourses_ValidLecturerId_Success()
+        {
+            var client = _httpClientFactory.CreateClient();
+
+            var response = await client.GetAsync("courses/" + _initializedIds.First());
+
+            Assert.IsNotNull(response);
+
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+
+            Course? course = JsonSerializer.Deserialize<Course>(jsonResponse);
+
+            Assert.IsNotNull(course);
+
+            Assert.AreEqual(_initializedIds.First(), course.courseId);
+        }
+
         [TestMethod]
         public async Task GetCourses_NoParams_Success()
         {
-            var client = _client;
+            var client = _httpClientFactory.CreateClient();
 
             var response = await client.GetAsync("courses/");
 
@@ -87,15 +135,14 @@ namespace CoursesSelectionUnitTest
 
             for (int i = 0; i < 5; i++)
             {
-                Assert.AreEqual(_initializedIds[i], courses[i].id);
+                Assert.AreEqual(_initializedIds[i], courses[i].courseId);
             }
         }
 
         [TestMethod]
         public async Task GetCourses_ValidCourseId_Success()
         {
-            //Arrange
-            var client = _client;
+            var client = _httpClientFactory.CreateClient();
 
             var response = await client.GetAsync("courses/"+_initializedIds.First());
 
@@ -107,14 +154,14 @@ namespace CoursesSelectionUnitTest
 
             Assert.IsNotNull(course);
 
-            Assert.AreEqual(_initializedIds.First(), course.id);
+            Assert.AreEqual(_initializedIds.First(), course.courseId);
         }
 
         [TestMethod]
         public async Task GetCourses_InvalidCourseId_NotFound()
         {
             //Arrange
-            var client = _client;
+            var client = _httpClientFactory.CreateClient();
 
             var invalidCourseId = Guid.NewGuid();
 
