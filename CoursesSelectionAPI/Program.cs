@@ -1,7 +1,11 @@
-﻿using CoursesSelectionAPI;
+using CoursesSelectionAPI;
+using CoursesSelectionAPI.Init;
 using CoursesSelectionAPI.Models;
+using CoursesSelectionAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddLogging();
 
 // Add services to the container.
 
@@ -18,6 +22,7 @@ builder.Services
     .AddSingleton<ILecturerRepository, ListLecturerRepository>()
     ;
 
+builder.Services.AddApiServices();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -10,21 +10,22 @@ namespace CoursesSelectionAPI.Models
 {
     public class Course
     {
-        //public Course(CourseDto courseDto)
-        //{
-        //    Name = courseDto.Name;
-        //    Description = courseDto.Description;
-        //    ClassroomId = courseDto.ClassroomId;
-        //    StartTime = courseDto.StartTime;
-        //    EndTime = courseDto.EndTime;
-        //    Credits = courseDto.Credits;
-        //    RatingPolicy = courseDto.RatingPolicy;
-        //}
+        public Course() { }
+
+        public Course(CourseDto courseDto)
+        {
+            Name = courseDto.Name;
+            Description = courseDto.Description;
+            ClassroomId = courseDto.ClassroomId;
+            StartTime = courseDto.StartTime;
+            EndTime = courseDto.EndTime;
+            Credits = courseDto.Credits;
+            RatingPolicy = courseDto.RatingPolicy;
+        }
 
         [Key]
-        [Required]
         [JsonInclude]
-        public Guid courseId { internal set; get; }
+        public Guid CourseId { internal set; get; }
 
         public string Name { set; get; } = null!;
 
@@ -45,5 +46,6 @@ namespace CoursesSelectionAPI.Models
         public DateTime LastUpdated { get; set; }
 
         public string LecturerId { get; set; } = "";
+
     }
 }

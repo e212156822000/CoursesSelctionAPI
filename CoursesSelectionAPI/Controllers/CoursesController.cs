@@ -1,16 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CoursesSelectionAPI.Models;
 using Microsoft.AspNetCore.JsonPatch;
-using CourseSelectionAPI.Models;
-
 
 namespace CoursesSelectionAPI.Controllers;
 
 [ApiController]
-[Route("courses")]
+[Route(RouteContants.Courses)]
 public class CoursesController : ControllerBase
 {
-    private ICourseRepository _courseRepository;
+    private readonly ICourseRepository _courseRepository;
 
     public CoursesController(ICourseRepository courseRepository)
     {
@@ -21,9 +19,9 @@ public class CoursesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CourseDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult GetCourse(Guid courseId)
+    public async Task<IActionResult> GetCourse(Guid courseId)
     {
-        var course = _courseRepository.GetCourse(courseId);
+        var course = await _courseRepository.FindCourseByIdAsync(courseId);
 
         return course != null ? Ok(course) : NotFound();
     }
@@ -53,9 +51,9 @@ public class CoursesController : ControllerBase
         
         Guid courseId = Guid.NewGuid();
 
-        _courseRepository.CreateCourse(new Course
+        _courseRepository.CreateCourseAsync(new Course
         {
-            courseId = courseId,
+            CourseId = courseId,
             Name = course.Name,
             Description = course.Description,
             StartTime = course.StartTime,
@@ -82,7 +80,6 @@ public class CoursesController : ControllerBase
         }
 
         return NotFound();
-
     }
 
     [HttpPatch("{courseId}")]

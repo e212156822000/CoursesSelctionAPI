@@ -1,10 +1,15 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
 using System.Text;
 using CoursesSelectionAPI.Models;
 using CoursesSelectionAPI.Controllers;
 using System.Text.Json;
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Mvc;
+using CoursesSelectionUnitTest.Utils;
 
 namespace CoursesSelectionUnitTest
 {
@@ -32,7 +37,7 @@ namespace CoursesSelectionUnitTest
         {
             var client = _httpClientFactory.CreateClient();
 
-            List<Course> courses = Enumerable.Range(0, 5).Select(index => new Course
+            List<CourseDto> courses = Enumerable.Range(0, 5).Select(index => new CourseDto
             {
                 Name = "Operating System " + index,
                 Description = "A fundamental course to introduce Operation System",
@@ -48,6 +53,8 @@ namespace CoursesSelectionUnitTest
                 string requestBody = JsonSerializer.Serialize(course);
 
                 var response = await client.PutAsync("courses/", new StringContent(requestBody, Encoding.UTF8, "application/json"));
+
+                Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
 
                 Assert.IsNotNull(response);
 
@@ -113,7 +120,7 @@ namespace CoursesSelectionUnitTest
 
             Assert.IsNotNull(course);
 
-            Assert.AreEqual(_initializedIds.First(), course.courseId);
+            Assert.AreEqual(_initializedIds.First(), course.CourseId);
         }
 
         [TestMethod]
@@ -125,17 +132,13 @@ namespace CoursesSelectionUnitTest
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            var jsonResponse = await response.Content.ReadAsStringAsync();
-
-            List<Course>? courses = JsonSerializer.Deserialize<List<Course>>(jsonResponse);
-
+            var courses = await response.ReadJsonResponseAsync<List<Course>>();
             Assert.IsNotNull(courses);
-
             Assert.AreEqual(5, courses.Count);
 
             for (int i = 0; i < 5; i++)
             {
-                Assert.AreEqual(_initializedIds[i], courses[i].courseId);
+                Assert.AreEqual(_initializedIds[i], courses[i].CourseId);
             }
         }
 
@@ -148,13 +151,10 @@ namespace CoursesSelectionUnitTest
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            var jsonResponse = await response.Content.ReadAsStringAsync();
-
-            Course? course = JsonSerializer.Deserialize<Course>(jsonResponse);
-
+            var course = await response.ReadJsonResponseAsync<Course>();
             Assert.IsNotNull(course);
 
-            Assert.AreEqual(_initializedIds.First(), course.courseId);
+            Assert.AreEqual(_initializedIds.First(), course.CourseId);
         }
 
         [TestMethod]
@@ -169,6 +169,7 @@ namespace CoursesSelectionUnitTest
 
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
 
+            Assert.AreEqual(_initializedIds.First(), course.CourseId);
         }
     }
 }

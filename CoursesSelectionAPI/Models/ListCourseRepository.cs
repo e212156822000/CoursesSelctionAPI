@@ -21,7 +21,7 @@ namespace CoursesSelectionAPI.Models
         {
             foreach (var course in _courses)
             {
-                if (course.courseId == courseId) return course;
+                if (course.CourseId == courseId) return course;
             }
 
             return null;
