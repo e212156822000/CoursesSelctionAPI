@@ -7,13 +7,13 @@ namespace CoursesSelectionAPI.Models
 
 		public IEnumerable<Course> ListCourses();
 
-        public List<Course> GetCourseByLecturerId(string lecturerId);
+        //public List<Course?> FindCourseByLecturerId(string lecturerId);
 
-        public bool DeleteCourse(Guid courseId);
+        public Task DeleteCourseAsync(Course course);
 
-		public void UpdateCourse(Course originalCourse, Course course);
+        //public Task UpdateCourse(Course originalCourse, Course course);
 
-		public Task<Course?> FindCourseByIdAsync(Guid id);
+        public Task<Course?> FindCourseByIdAsync(Guid id);
 
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using CourseSelectionAPI.Models;
 using CoursesSelectionAPI.Controllers;
 
 namespace CoursesSelectionAPI.Models
@@ -7,9 +8,10 @@ namespace CoursesSelectionAPI.Models
     {
         private List<Course> _courses = new List<Course>();
 
-        public void CreateCourse(Course course)
+        public Task CreateCourseAsync(Course course)
         {
             _courses.Add(course);
+            return Task.CompletedTask;
         }
 
         public IEnumerable<Course> ListCourses()
@@ -17,15 +19,6 @@ namespace CoursesSelectionAPI.Models
             return _courses;
         }
 
-        public Course? GetCourse(Guid courseId)
-        {
-            foreach (var course in _courses)
-            {
-                if (course.CourseId == courseId) return course;
-            }
-
-            return null;
-        }
         public List<Course> GetCourseByLecturerId(string lecturerId)
         {
             List<Course> _courseForLecturer = new List<Course>();
@@ -41,25 +34,24 @@ namespace CoursesSelectionAPI.Models
             return _courseForLecturer;
         }
 
-        public bool DeleteCourse(Guid courseId)
+        public Task DeleteCourseAsync(Course course)
         {
-            foreach(var course in _courses)
-            {
-                if (course.courseId == courseId)
-                {
-                    _courses.Remove(course);
+            _courses.Remove(course);
+            return Task.CompletedTask;
+        }
 
-                    return true;
+        public Task<Course?> FindCourseByIdAsync(Guid courseId)
+        {
+
+            foreach (var course in _courses)
+            {
+                if (course.CourseId == courseId)
+                {
+                    return Task.FromResult<Course?>(course);
                 }
             }
 
-            return false;
-
-        }
-
-        public void UpdateCourse(Course originalCourse, Course course)
-        {
-            
+            return Task.FromResult<Course?>(null);
         }
     }
 }

@@ -1,10 +1,5 @@
-﻿using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace CoursesSelectionAPI.Models
 {
@@ -14,6 +9,7 @@ namespace CoursesSelectionAPI.Models
 
         public Course(CourseDto courseDto)
         {
+            CourseId = Guid.NewGuid();
             Name = courseDto.Name;
             Description = courseDto.Description;
             ClassroomId = courseDto.ClassroomId;

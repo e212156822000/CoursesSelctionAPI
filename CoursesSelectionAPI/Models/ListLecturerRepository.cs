@@ -12,7 +12,7 @@ namespace CoursesSelectionAPI.Models
             _lecturers.Add(lecturer);
         }
 
-        public Lecturer GetLecturerById(string lecturerId)
+        public Lecturer? GetLecturerById(string lecturerId)
         {
             foreach (var lecturer in _lecturers)
             {

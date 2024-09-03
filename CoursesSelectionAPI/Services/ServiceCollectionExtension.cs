@@ -19,5 +19,12 @@ namespace CoursesSelectionAPI.Services
                 .AddDbContext<CourseSelectionDataContext>()
                 .AddScoped<ICourseRepository, DbContextCourseRepositorycs>();
         }
+
+        public static IServiceCollection AddListServices(this IServiceCollection services)
+        {
+            return services
+                .AddSingleton<ICourseRepository, ListCourseRepository>()
+                .AddSingleton<ILecturerRepository, ListLecturerRepository>();
+        }
     }
 }

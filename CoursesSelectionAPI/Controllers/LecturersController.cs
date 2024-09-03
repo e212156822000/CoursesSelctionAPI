@@ -63,25 +63,25 @@ public class LecturersController : ControllerBase
     }
 
 
-    [HttpGet("{lecturerId}/courses")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<CourseDto>))]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult GetCoursesByLecturerId(
-        string lecturerId,
-        [FromQuery] int offset,
-        [FromQuery] int limit,
-        [FromQuery] string dept,
-        [FromQuery] string college)
-    {
-        var lecturer = _lecturerRepository.GetLecturerById(lecturerId);
+    //[HttpGet("{lecturerId}/courses")]
+    //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<CourseDto>))]
+    //[ProducesResponseType(StatusCodes.Status204NoContent)]
+    //[ProducesResponseType(StatusCodes.Status404NotFound)]
+    //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+    //public IActionResult GetCoursesByLecturerId(
+    //    string lecturerId,
+    //    [FromQuery] int offset,
+    //    [FromQuery] int limit,
+    //    [FromQuery] string dept,
+    //    [FromQuery] string college)
+    //{
+    //    var lecturer = _lecturerRepository.GetLecturerById(lecturerId);
 
-        if (lecturer == null) return NotFound();
+    //    if (lecturer == null) return NotFound();
 
-        var courseList = _courseRepository.GetCourseByLecturerId(lecturerId);
+    //    var courseList = _courseRepository.GetCourseByLecturerId(lecturerId);
 
-        return courseList.Count == 0 ? NoContent() : Ok(courseList);
-    }
+    //    return courseList.Count == 0 ? NoContent() : Ok(courseList);
+    //}
 }
 

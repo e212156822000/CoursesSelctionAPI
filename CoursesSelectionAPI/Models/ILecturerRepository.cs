@@ -9,7 +9,7 @@ namespace CoursesSelectionAPI.Models
 
         public IEnumerable<Lecturer> ListLecturers();
 
-        public Lecturer GetLecturerById(string LecturerId);
+        public Lecturer? GetLecturerById(string LecturerId);
 
     }
 }

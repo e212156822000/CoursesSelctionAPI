@@ -21,6 +21,12 @@ namespace CoursesSelectionAPI.Models
             await _db.SaveChangesAsync();
         }
 
+        public async Task DeleteCourseAsync(Course course)
+        {
+            _db.Courses.Remove(course);
+            await _db.SaveChangesAsync();
+        }
+
         public async Task<Course?> FindCourseByIdAsync(Guid id)
         {
             return await _db.Courses.FindAsync(id);

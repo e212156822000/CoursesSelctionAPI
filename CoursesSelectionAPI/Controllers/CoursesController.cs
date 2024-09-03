@@ -45,25 +45,20 @@ public class CoursesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     //[SwaggerResponse(StatusCodes.Status409Conflict, Description = "The same course name and start time already exists under the same lecturer.")]
-    public IActionResult CreateCourse([FromBody] CourseDto course)
+    public IActionResult CreateCourse([FromBody] CourseDto courseDto)
     {
         //TODO: Conflict Detetion
-        
-        Guid courseId = Guid.NewGuid();
 
-        _courseRepository.CreateCourseAsync(new Course
+        if (!ModelState.IsValid)
         {
-            CourseId = courseId,
-            Name = course.Name,
-            Description = course.Description,
-            StartTime = course.StartTime,
-            EndTime = course.EndTime,
-            RatingPolicy = course.RatingPolicy,
-            Credits = course.Credits,
-            ClassroomId = course.ClassroomId
-        });
+            return BadRequest(ModelState);
+        }
 
-        return CreatedAtAction(nameof(GetCourse), new { courseId = courseId }, courseId);
+        var course = new Course(courseDto);
+
+        _courseRepository.CreateCourseAsync(course);
+
+        return CreatedAtAction(nameof(GetCourse), new { courseId = course.CourseId }, course.CourseId);
     }
 
     [HttpDelete("{courseId}")]
@@ -72,14 +67,19 @@ public class CoursesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult DeleteCourse(Guid courseId)
+    public async Task<IActionResult> DeleteCourseAsync(Guid courseId)
     {
-        if(_courseRepository.DeleteCourse(courseId))
+        var course = await _courseRepository.FindCourseByIdAsync(courseId);
+
+        if (course == null)
         {
-            return Ok();
+            return NotFound();
         }
 
-        return NotFound();
+        await _courseRepository.DeleteCourseAsync(course);
+
+        return Ok();
+
     }
 
     [HttpPatch("{courseId}")]
@@ -89,10 +89,10 @@ public class CoursesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public IActionResult UpdateCourse(Guid courseId, [FromBody] JsonPatchDocument<Course?> patchDoc)
+    public async Task<IActionResult> UpdateCourseAsync(Guid courseId, [FromBody] JsonPatchDocument<Course?> patchDoc)
     {
 
-        var existingCourse = _courseRepository.GetCourse(courseId);
+        var existingCourse = await _courseRepository.FindCourseByIdAsync(courseId);
 
         if (existingCourse == null) return NotFound();
 
