@@ -10,6 +10,7 @@ using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc;
 using CoursesSelectionUnitTest.Utils;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace CoursesSelectionUnitTest
 {
@@ -103,9 +104,9 @@ namespace CoursesSelectionUnitTest
             _initializedIds.Remove(_initializedIds.Last());
         }
 
-        [TestMethod]
-        public async Task GetCourses_ValidLecturerId_Success()
-        {
+        //[TestMethod]
+        //public async Task GetCourses_ValidLecturerId_Success()
+        //{
             //var client = _httpClientFactory.CreateClient();
 
             //var response = await client.GetAsync("courses/" + _initializedIds.First());
@@ -121,6 +122,33 @@ namespace CoursesSelectionUnitTest
             //Assert.IsNotNull(course);
 
             //Assert.AreEqual(_initializedIds.First(), course.CourseId);
+        //}
+
+        [TestMethod]
+        public async Task UpdateCourse_ValidCourseId_Success()
+        {
+            var client = _httpClientFactory.CreateClient();
+
+            var updatedName = "Updated Course Name";
+
+            JsonPatchDocument<Course> patchDoc = new JsonPatchDocument<Course>();
+
+            patchDoc.Replace(p => p.Name, updatedName);
+
+            string requestBody = JsonSerializer.Serialize(patchDoc.Operations);
+
+            var httpContent = new StringContent(requestBody, Encoding.UTF8, "application/json-patch+json");
+
+            var response = await client.PatchAsync("courses/"+_initializedIds.First(), httpContent);
+
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+
+            var course = await response.ReadJsonResponseAsync<Course>();
+
+            Assert.IsNotNull(course);
+
+            Assert.AreEqual(course.Name, updatedName);
+
         }
 
         [TestMethod]

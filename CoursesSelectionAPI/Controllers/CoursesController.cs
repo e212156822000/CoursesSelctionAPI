@@ -83,7 +83,7 @@ public class CoursesController : ControllerBase
     }
 
     [HttpPatch("{courseId}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CourseDto))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Course))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -91,14 +91,14 @@ public class CoursesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> UpdateCourseAsync(Guid courseId, [FromBody] JsonPatchDocument<Course?> patchDoc)
     {
-
+        //TODO: Handle Schedule Conflict
         var existingCourse = await _courseRepository.FindCourseByIdAsync(courseId);
 
         if (existingCourse == null) return NotFound();
 
         patchDoc.ApplyTo(existingCourse);
 
-        //TODO: Implement and save the updated data.
+        await _courseRepository.UpdateCourse(courseId, existingCourse);
 
         return Ok(existingCourse);
 

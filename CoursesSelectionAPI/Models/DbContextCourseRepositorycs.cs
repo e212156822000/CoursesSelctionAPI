@@ -36,5 +36,10 @@ namespace CoursesSelectionAPI.Models
         {
             return _db.Courses;
         }
+
+        public Task UpdateCourse(Guid courseId, Course course)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

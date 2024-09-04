@@ -53,6 +53,19 @@ namespace CoursesSelectionAPI.Models
 
             return Task.FromResult<Course?>(null);
         }
+
+        public Task UpdateCourse(Guid courseId, Course updatedCourse)
+        {
+            for (int i = 0; i < _courses.Count; i++)
+            {
+                if (_courses[i].CourseId == courseId)
+                {
+                    _courses[i] = updatedCourse;
+                    return Task.CompletedTask;
+                }
+            }
+            return Task.FromException(new Exception());
+        }
     }
 }
 

@@ -11,7 +11,7 @@ namespace CoursesSelectionAPI.Models
 
         public Task DeleteCourseAsync(Course course);
 
-        //public Task UpdateCourse(Course originalCourse, Course course);
+        public Task UpdateCourse(Guid courseId, Course course);
 
         public Task<Course?> FindCourseByIdAsync(Guid id);
 
