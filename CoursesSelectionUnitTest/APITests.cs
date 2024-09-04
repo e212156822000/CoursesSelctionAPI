@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using CoursesSelectionAPI.Models;
 using CoursesSelectionAPI.Controllers;
+using CoursesSelectionAPI.Constants;
 using System.Text.Json;
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,7 +54,7 @@ namespace CoursesSelectionUnitTest
 
                 string requestBody = JsonSerializer.Serialize(course);
 
-                var response = await client.PutAsync("courses/", new StringContent(requestBody, Encoding.UTF8, "application/json"));
+                var response = await client.PutAsync(RouteContants.CoursesPath, new StringContent(requestBody, Encoding.UTF8, "application/json"));
 
                 Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
 
@@ -80,7 +81,7 @@ namespace CoursesSelectionUnitTest
 
             foreach (var _initializedId in _initializedIds)
             {
-                var response = await client.DeleteAsync("courses/" + _initializedId);
+                var response = await client.DeleteAsync(RouteContants.CoursesPath + _initializedId);
 
                 Assert.IsNotNull(response);
 
@@ -95,7 +96,7 @@ namespace CoursesSelectionUnitTest
         {
             var client = _httpClientFactory.CreateClient();
 
-            var response = await client.DeleteAsync("courses/" + _initializedIds.Last());
+            var response = await client.DeleteAsync(RouteContants.CoursesPath + _initializedIds.Last());
 
             Assert.IsNotNull(response);
 
@@ -139,7 +140,7 @@ namespace CoursesSelectionUnitTest
 
             var httpContent = new StringContent(requestBody, Encoding.UTF8, "application/json-patch+json");
 
-            var response = await client.PatchAsync("courses/"+_initializedIds.First(), httpContent);
+            var response = await client.PatchAsync(RouteContants.CoursesPath + _initializedIds.First(), httpContent);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
@@ -156,7 +157,7 @@ namespace CoursesSelectionUnitTest
         {
             var client = _httpClientFactory.CreateClient();
 
-            var response = await client.GetAsync("courses/");
+            var response = await client.GetAsync(RouteContants.CoursesPath);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
@@ -175,7 +176,7 @@ namespace CoursesSelectionUnitTest
         {
             var client = _httpClientFactory.CreateClient();
 
-            var response = await client.GetAsync("courses/"+_initializedIds.First());
+            var response = await client.GetAsync(RouteContants.CoursesPath + _initializedIds.First());
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
@@ -194,7 +195,7 @@ namespace CoursesSelectionUnitTest
 
             var invalidCourseId = Guid.NewGuid();
 
-            var response = await client.GetAsync("courses/" + invalidCourseId);
+            var response = await client.GetAsync(RouteContants.CoursesPath + invalidCourseId);
 
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
 

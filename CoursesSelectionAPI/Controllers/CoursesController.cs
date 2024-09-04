@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CoursesSelectionAPI.Models;
+using CoursesSelectionAPI.Constants;
 using Microsoft.AspNetCore.JsonPatch;
 
 namespace CoursesSelectionAPI.Controllers;

@@ -19,9 +19,11 @@
   <ItemGroup>
     <None Remove="Models\" />
     <None Remove="Interfaces\" />
+    <None Remove="Constants\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interfaces\" />
+    <Folder Include="Constants\" />
   </ItemGroup>
   
   <ItemGroup>
